@@ -3,6 +3,7 @@ Sistema de gerenciamento de cupons desenvolvido em **Spring Boot 3.x** com **Jav
 Este projeto pode ser executado via **Docker** e possui **Swagger** para documentação da API.
 
 ## Estrutura do projeto
+```
 cupom/
 ├─ src/ # Código fonte Java
 ├─ target/ # Artefatos compilados
@@ -10,6 +11,7 @@ cupom/
 ├─ pom.xml # Arquivo de configuração de dependências maven
 ├─ Dockerfile # Dockerfile para build e execução
 └─ README.md
+```
 
 ## Pré-requisitos
 - Java 17
