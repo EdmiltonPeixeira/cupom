@@ -50,4 +50,8 @@ public class Cupom {
     public boolean expirationValid() {
         return expirationDate != null && expirationDate.toLocalDate().isAfter(LocalDateTime.now().toLocalDate());
     }
+
+    public boolean isInativo(){
+        return status.equals(Status.INACTIVE);
+    }
 }

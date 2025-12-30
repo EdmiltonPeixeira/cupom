@@ -18,6 +18,20 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(body);
     }
 
+    @ExceptionHandler(RecursoNaoEncontradoException.class)
+    public ResponseEntity<Map<String, String>> handleRecursoNaoEncontrado(RecursoNaoEncontradoException ex) {
+        Map<String, String> body = new HashMap<>();
+        body.put("Erro", ex.getMessage());
+        return ResponseEntity.badRequest().body(body);
+    }
+
+    @ExceptionHandler(EntityInvalidDeleteException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidDelete(EntityInvalidDeleteException ex) {
+        Map<String, String> body = new HashMap<>();
+        body.put("Erro", ex.getMessage());
+        return ResponseEntity.badRequest().body(body);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, String>> handleException(Exception ex) {
         Map<String, String> body = new HashMap<>();

@@ -2,9 +2,13 @@ package com.edmilton.cupom.service;
 
 import com.edmilton.cupom.dto.CupomCreateDto;
 import com.edmilton.cupom.entity.Cupom;
+import com.edmilton.cupom.enums.Status;
 import com.edmilton.cupom.exceptions.CupomExpiradoException;
+import com.edmilton.cupom.exceptions.EntityInvalidDeleteException;
+import com.edmilton.cupom.exceptions.RecursoNaoEncontradoException;
 import com.edmilton.cupom.repository.CupomRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CupomService {
@@ -15,6 +19,7 @@ public class CupomService {
         this.cupomRepository = cupomRepository;
     }
 
+    @Transactional
     public Cupom create(CupomCreateDto cupomCreateDto) {
         Cupom cupom = cupomCreateDto.toEntity();
         cupom.sanitizeCode();
@@ -24,5 +29,16 @@ public class CupomService {
             throw new CupomExpiradoException("Cupom expirado.");
         }
         return cupom;
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        Cupom cupom = cupomRepository.findById(id).
+                orElseThrow(() -> new RecursoNaoEncontradoException("Cupom não existe."));
+        if(cupom.isInativo()){
+            throw new EntityInvalidDeleteException("Cupom não pode ser excluído novamente.");
+        }
+        cupom.setStatus(Status.INACTIVE);
+        cupomRepository.save(cupom);
     }
 }
