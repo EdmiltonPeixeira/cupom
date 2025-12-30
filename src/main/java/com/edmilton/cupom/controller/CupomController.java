@@ -4,6 +4,7 @@ import com.edmilton.cupom.dto.CupomCreateDto;
 import com.edmilton.cupom.entity.Cupom;
 import com.edmilton.cupom.service.CupomService;
 import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +21,8 @@ public class CupomController {
     }
 
     @PostMapping
-    public Cupom create(@RequestBody @Valid CupomCreateDto cupomCreateDto) {
-        return cupomService.create(cupomCreateDto);
+    public ResponseEntity<Cupom> create(@RequestBody @Valid CupomCreateDto cupomCreateDto) {
+        Cupom salvo = cupomService.create(cupomCreateDto);
+        return ResponseEntity.ok(salvo);
     }
 }

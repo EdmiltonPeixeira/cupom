@@ -2,6 +2,7 @@ package com.edmilton.cupom.service;
 
 import com.edmilton.cupom.dto.CupomCreateDto;
 import com.edmilton.cupom.entity.Cupom;
+import com.edmilton.cupom.exceptions.CupomExpiradoException;
 import com.edmilton.cupom.repository.CupomRepository;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,11 @@ public class CupomService {
     public Cupom create(CupomCreateDto cupomCreateDto) {
         Cupom cupom = toEntity(cupomCreateDto);
         cupom.sanitizeCode();
-        cupomRepository.save(cupom);
+        if(cupom.expirationValid()) {
+            cupomRepository.save(cupom);
+        } else {
+            throw new CupomExpiradoException("Cupom expirado.");
+        }
         return cupom;
     }
 

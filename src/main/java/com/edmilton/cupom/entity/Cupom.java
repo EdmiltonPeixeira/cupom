@@ -46,4 +46,8 @@ public class Cupom {
             code = code.replaceAll("[^a-zA-Z0-9]", "");
         }
     }
+
+    public boolean expirationValid() {
+        return expirationDate != null && expirationDate.toLocalDate().isAfter(LocalDateTime.now().toLocalDate());
+    }
 }
