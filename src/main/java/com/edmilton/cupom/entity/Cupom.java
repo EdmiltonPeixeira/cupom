@@ -1,5 +1,6 @@
 package com.edmilton.cupom.entity;
 
+import com.edmilton.cupom.dto.CupomResponseDto;
 import com.edmilton.cupom.enums.Status;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -72,5 +73,20 @@ public class Cupom {
     @JsonIgnore
     public boolean isInativo(){
         return status.equals(Status.INACTIVE);
+    }
+
+    public CupomResponseDto toResponseDto() {
+        CupomResponseDto cupomResponseDto = new CupomResponseDto();
+        cupomResponseDto.setId(id);
+        cupomResponseDto.setVersion(version);
+        cupomResponseDto.setCode(code);
+        cupomResponseDto.setDescription(description);
+        cupomResponseDto.setDiscountValue(discountValue);
+        cupomResponseDto.setExpirationDate(expirationDate.toString());
+        cupomResponseDto.setStatus(status);
+        cupomResponseDto.setPublished(published);
+        cupomResponseDto.setRedeemed(redeemed);
+
+        return cupomResponseDto;
     }
 }

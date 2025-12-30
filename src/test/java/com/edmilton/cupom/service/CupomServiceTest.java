@@ -1,6 +1,7 @@
 package com.edmilton.cupom.service;
 
 import com.edmilton.cupom.dto.CupomCreateDto;
+import com.edmilton.cupom.dto.CupomResponseDto;
 import com.edmilton.cupom.entity.Cupom;
 import com.edmilton.cupom.enums.Status;
 import com.edmilton.cupom.exceptions.EntityInvalidDeleteException;
@@ -57,7 +58,7 @@ class CupomServiceTest {
 
     @Test
     void deveCadastrarCupomSemCaracteresEspeciais() {
-        Cupom result = service.create(cupomCreateDto);
+        CupomResponseDto result = service.create(cupomCreateDto);
         assertEquals("EDM50", result.getCode());
     }
 
@@ -74,8 +75,10 @@ class CupomServiceTest {
 
     @Test
     void deveCadastrarCupomComExpiracaoValida(){
-        Cupom result = service.create(cupomCreateDto);
-        assertTrue(result.expirationValid());
+        when(cupomCreateDto.toEntity()).thenReturn(cupom);
+        CupomResponseDto result = service.create(cupomCreateDto);
+        assertTrue(cupom.expirationValid());
+        assertEquals(Status.ACTIVE, result.getStatus());
     }
 
     @Test

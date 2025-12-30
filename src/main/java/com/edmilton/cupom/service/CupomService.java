@@ -1,6 +1,7 @@
 package com.edmilton.cupom.service;
 
 import com.edmilton.cupom.dto.CupomCreateDto;
+import com.edmilton.cupom.dto.CupomResponseDto;
 import com.edmilton.cupom.entity.Cupom;
 import com.edmilton.cupom.enums.Status;
 import com.edmilton.cupom.exceptions.InvalidFormatException;
@@ -20,7 +21,7 @@ public class CupomService {
     }
 
     @Transactional
-    public Cupom create(CupomCreateDto cupomCreateDto) {
+    public CupomResponseDto create(CupomCreateDto cupomCreateDto) {
         Cupom cupom = cupomCreateDto.toEntity();
         cupom.sanitizeCode();
         if(!cupom.expirationValid()){
@@ -30,7 +31,7 @@ public class CupomService {
             throw new InvalidFormatException("Cupom contém caracteres especiais.");
         }
         cupomRepository.save(cupom);
-        return cupom;
+        return cupom.toResponseDto();
     }
 
     @Transactional

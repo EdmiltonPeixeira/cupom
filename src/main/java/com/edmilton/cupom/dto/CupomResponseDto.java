@@ -1,34 +1,23 @@
 package com.edmilton.cupom.dto;
 
-import com.edmilton.cupom.entity.Cupom;
 import com.edmilton.cupom.enums.Status;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.Data;
 
 import java.math.BigDecimal;
-import java.time.Instant;
-import java.time.LocalDateTime;
 
 @Data
-public class CupomCreateDto {
+public class CupomResponseDto {
     @Schema(description = "ID do cupom", example = "1")
     private Long id;
     @Schema(description = "Versão do objeto", example = "0")
     private Long version;
-    @NotBlank
     @Schema(description = "Código do cupom", example = "edm50")
     private String code;
-    @NotBlank
     @Schema(description = "Descrição do cupom", example = "Concede 50% de desconto")
     private String description;
-    @NotNull
     @Schema(description = "Percentual de desconto do cupom", example = "0.5")
-    private BigDecimal discountValue = BigDecimal.valueOf(0.5);
-    @NotNull
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
+    private BigDecimal discountValue;
     @Schema(description = "Data de expiração do cupom", example = "2025-12-31T18:47:32.123Z")
     private String expirationDate;
     @Schema(description = "Status do cupom", example = "ACTIVE")
@@ -37,18 +26,4 @@ public class CupomCreateDto {
     private boolean published;
     @Schema(description = "Controle de resgate do cupom", example = "false")
     private boolean redeemed;
-
-    public Cupom toEntity() {
-        Cupom cupom = new Cupom();
-        cupom.setId(this.id);
-        cupom.setVersion(this.version);
-        cupom.setCode(this.code);
-        cupom.setDescription(this.description);
-        cupom.setDiscountValue(this.discountValue);
-        cupom.setExpirationDate(Instant.parse(expirationDate));
-        cupom.setStatus(this.status);
-        cupom.setPublished(this.published);
-        cupom.setRedeemed(this.redeemed);
-        return cupom;
-    }
 }

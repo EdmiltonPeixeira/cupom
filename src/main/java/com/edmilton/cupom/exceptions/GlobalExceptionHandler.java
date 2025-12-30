@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.HashMap;
 import java.util.Map;
 
-@RestControllerAdvice
+@RestControllerAdvice(basePackages = "com.edmilton.cupom.controller")
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidFormatException.class)
@@ -22,7 +22,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, String>> handleRecursoNaoEncontrado(RecursoNaoEncontradoException ex) {
         Map<String, String> body = new HashMap<>();
         body.put("Erro", ex.getMessage());
-        return ResponseEntity.badRequest().body(body);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
     }
 
     @ExceptionHandler(EntityInvalidDeleteException.class)
