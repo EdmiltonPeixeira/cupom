@@ -30,4 +30,18 @@ public class CupomCreateDto {
     private Status status;
     private boolean published;
     private boolean redeemed;
+
+    public Cupom toEntity() {
+        Cupom cupom = new Cupom();
+        cupom.setId(this.id);
+        cupom.setVersion(this.version);
+        cupom.setCode(this.code);
+        cupom.setDescription(this.description);
+        cupom.setDiscountValue(this.discountValue);
+        cupom.setExpirationDate(this.expirationDate);
+        cupom.setStatus(this.status);
+        cupom.setPublished(this.published);
+        cupom.setRedeemed(this.redeemed);
+        return cupom;
+    }
 }
