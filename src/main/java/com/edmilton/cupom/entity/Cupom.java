@@ -1,28 +1,23 @@
 package com.edmilton.cupom.entity;
 
 import com.edmilton.cupom.enums.Status;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Version;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.AllArgsConstructor;
 
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
-@Entity(name = "cupom")
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity(name = "cupom")
 public class Cupom {
 
     @Id
@@ -30,15 +25,25 @@ public class Cupom {
     private Long id;
     @Version
     private Long version;
-    @NotBlank
+    @NotNull
     private String code;
-    @NotBlank
+    @NotNull
     private String description;
     @NotNull
+    @Column(name = "discount_value")
     private BigDecimal discountValue = BigDecimal.valueOf(0.5);
-    @NotBlank
-    private String expirationDate;
+    @NotNull
+    @Column(name = "expiration_date")
+    private LocalDateTime expirationDate;
     private Status status;
-    private boolean published;
-    private boolean redeemed;
+    @Column(name = "in_published")
+    private boolean published = false;
+    @Column(name = "in_redeemed")
+    private boolean redeemed = false;
+
+    public void sanitizeCode() {
+        if(code != null && !code.isBlank()){
+            code = code.replaceAll("[^a-zA-Z0-9]", "");
+        }
+    }
 }
