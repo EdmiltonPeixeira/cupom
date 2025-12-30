@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Data
@@ -22,7 +23,7 @@ public class CupomCreateDto {
     private BigDecimal discountValue = BigDecimal.valueOf(0.5);
     @NotNull
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
-    private LocalDateTime expirationDate;
+    private String expirationDate;
     private Status status;
     private boolean published;
     private boolean redeemed;
@@ -34,7 +35,7 @@ public class CupomCreateDto {
         cupom.setCode(this.code);
         cupom.setDescription(this.description);
         cupom.setDiscountValue(this.discountValue);
-        cupom.setExpirationDate(this.expirationDate);
+        cupom.setExpirationDate(Instant.parse(expirationDate));
         cupom.setStatus(this.status);
         cupom.setPublished(this.published);
         cupom.setRedeemed(this.redeemed);

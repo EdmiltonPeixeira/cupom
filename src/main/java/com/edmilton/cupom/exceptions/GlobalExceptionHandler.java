@@ -11,8 +11,8 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(CupomExpiradoException.class)
-    public ResponseEntity<Map<String, String>> handleCupomExpirado(CupomExpiradoException ex) {
+    @ExceptionHandler(InvalidFormatException.class)
+    public ResponseEntity<Map<String, String>> handleCupomExpirado(InvalidFormatException ex) {
         Map<String, String> body = new HashMap<>();
         body.put("Erro", ex.getMessage());
         return ResponseEntity.badRequest().body(body);

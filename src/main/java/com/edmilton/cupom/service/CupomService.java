@@ -3,7 +3,7 @@ package com.edmilton.cupom.service;
 import com.edmilton.cupom.dto.CupomCreateDto;
 import com.edmilton.cupom.entity.Cupom;
 import com.edmilton.cupom.enums.Status;
-import com.edmilton.cupom.exceptions.CupomExpiradoException;
+import com.edmilton.cupom.exceptions.InvalidFormatException;
 import com.edmilton.cupom.exceptions.EntityInvalidDeleteException;
 import com.edmilton.cupom.exceptions.RecursoNaoEncontradoException;
 import com.edmilton.cupom.repository.CupomRepository;
@@ -23,11 +23,13 @@ public class CupomService {
     public Cupom create(CupomCreateDto cupomCreateDto) {
         Cupom cupom = cupomCreateDto.toEntity();
         cupom.sanitizeCode();
-        if(cupom.expirationValid()) {
-            cupomRepository.save(cupom);
-        } else {
-            throw new CupomExpiradoException("Cupom expirado.");
+        if(!cupom.expirationValid()){
+            throw new InvalidFormatException("Cupom expirado.");
         }
+        if(!cupom.isSanitized()){
+            throw new InvalidFormatException("Cupom contém caracteres especiais.");
+        }
+        cupomRepository.save(cupom);
         return cupom;
     }
 

@@ -1,8 +1,8 @@
 package com.edmilton.cupom.entity;
 
 import com.edmilton.cupom.enums.Status;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +11,10 @@ import lombok.Setter;
 
 
 import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Getter
 @Setter
@@ -34,23 +37,39 @@ public class Cupom {
     private BigDecimal discountValue = BigDecimal.valueOf(0.5);
     @NotNull
     @Column(name = "expiration_date")
-    private LocalDateTime expirationDate;
-    private Status status;
+    private Instant expirationDate;
+    private Status status = Status.ACTIVE;
     @Column(name = "in_published")
     private boolean published = false;
     @Column(name = "in_redeemed")
     private boolean redeemed = false;
 
+    private static final ZoneId BUSINESS_ZONE = ZoneId.of("America/Sao_Paulo");
+
+    @JsonIgnore
     public void sanitizeCode() {
         if(code != null && !code.isBlank()){
             code = code.replaceAll("[^a-zA-Z0-9]", "");
         }
     }
 
-    public boolean expirationValid() {
-        return expirationDate != null && expirationDate.toLocalDate().isAfter(LocalDateTime.now().toLocalDate());
+    @JsonIgnore
+    public boolean isSanitized() {
+        return !code.matches(".*[^a-zA-Z0-9].*");
     }
 
+    @JsonIgnore
+    public boolean expirationValid() {
+        LocalDate expirationDay = expirationDate
+                .atZone(BUSINESS_ZONE)
+                .toLocalDate();
+
+        LocalDate today = LocalDate.now(BUSINESS_ZONE);
+
+        return expirationDay.isAfter(today) || expirationDay.equals(today);
+    }
+
+    @JsonIgnore
     public boolean isInativo(){
         return status.equals(Status.INACTIVE);
     }
